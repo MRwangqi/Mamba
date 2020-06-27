@@ -1,5 +1,6 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'com.novoda.bintray-release'
 
 dependencies {
     implementation gradleApi()
@@ -16,10 +17,20 @@ uploadArchives{
         // 本地仓库路径
         repository(url:LOCAL_REPO)
         // 唯一标识
-        pom.groupId = "com.codelang.mamba"
+        pom.groupId = "com.codelang"
         // 项目名称
-        pom.artifactId = "mamba"
+        pom.artifactId = "mamba-plugin"
         // 版本号
-        pom.version = "1.0.0"
+        pom.version = "1.0.1"
     }
+}
+
+publish {
+    userOrg = 'codelang-organization'             // Binary用户名
+    repoName = 'maven'          // Binary上的刚才新建的仓库名（Repository）
+    groupId = 'com.codelang'        // 依赖名compile 'x:y:z'中的包名x
+    artifactId = 'mamba-plugin'        // 依赖名compile 'x:y:z'中的项目名y
+    publishVersion = '1.0.1'          // 依赖名compile 'x:y:z'中的版本号z
+    desc = 'Non intrusive frame'            // 对该开源组件的说明
+    website = 'https://github.com/MRwangqi/WQthrottle'  // VCS地址，即填写项目上传的Github地址
 }
