@@ -1,6 +1,5 @@
 package com.codelang.mamba.core
 
-import com.codelang.api.annotation.Track
 import com.codelang.mamba.config.Config
 import com.codelang.mamba.utils.CheckUtils
 import com.codelang.mamba.utils.Logger
@@ -26,15 +25,14 @@ class MambaClassVisitor extends ClassVisitor {
     MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions)
 
-
         mv = new AdviceAdapter(Opcodes.ASM6, mv, access, name, desc) {
 
             boolean isTrack = false
 
             @Override
             AnnotationVisitor visitAnnotation(String annotation, boolean visible) {
-                if (Type.getDescriptor(Track.class) == annotation) {
-                    // 判断方法的注解是否是 NotNull
+                //if (Type.getDescriptor(Track.class) == annotation)
+                if (annotation == Config.ANNOTATION_TRACK_DESC) {
                     isTrack = true
                 }
                 return super.visitAnnotation(annotation, visible)
@@ -43,7 +41,7 @@ class MambaClassVisitor extends ClassVisitor {
             @Override
             protected void onMethodEnter() {
                 super.onMethodEnter()
-                Logger.e("onMethodEnter  class =" + className + " methodName=" + name)
+                Logger.e("onMethodExit  class =" + className + " methodName=" + name)
 
                 // 获取方法的所有参数类型
                 final Type[] argTypes = Type.getArgumentTypes(desc)
