@@ -1,0 +1,5 @@
+rootProject.name='Mamba'
+include ':app'
+include ':mamba-plugin'
+include ':mamba-api'
+include ':library'

@@ -1,0 +1,25 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'com.android.tools.build:gradle:3.4.0'
+}
+
+repositories {
+    jcenter()
+}
+
+uploadArchives{
+    repositories.mavenDeployer{
+        // 本地仓库路径
+        repository(url:LOCAL_REPO)
+        // 唯一标识
+        pom.groupId = "com.codelang.mamba"
+        // 项目名称
+        pom.artifactId = "mamba"
+        // 版本号
+        pom.version = "1.0.0"
+    }
+}
