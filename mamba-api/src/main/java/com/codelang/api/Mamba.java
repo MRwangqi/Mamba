@@ -11,26 +11,14 @@ public class Mamba {
     }
 
     public static void i(Class clazz, String methodName, Object... args) {
-        try {
-            iMambaLoader.methodEnter(clazz, methodName, args);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("请先初始化 Mamba.init");
-        }
+        iMambaLoader.methodEnter(clazz, methodName, args);
     }
 
     public static void i(Class clazz, String methodName) {
-        try {
-            iMambaLoader.methodEnter(clazz, methodName, null);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("请先初始化 Mamba.init");
-        }
+        iMambaLoader.methodEnter(clazz, methodName, null);
     }
 
     public static void o(Class clazz, String methodName) {
-        try {
-            iMambaLoader.methodExit(clazz, methodName);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("请先初始化 Mamba.init");
-        }
+        iMambaLoader.methodExit(clazz, methodName);
     }
 }

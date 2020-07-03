@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 29
@@ -21,4 +22,14 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+publish {
+    userOrg = 'codelang-organization'             // Binary用户名
+    repoName = 'maven'          // Binary上的刚才新建的仓库名（Repository）
+    groupId = 'com.codelang'        // 依赖名compile 'x:y:z'中的包名x
+    artifactId = 'mamba-api'        // 依赖名compile 'x:y:z'中的项目名y
+    publishVersion = '1.0.2'          // 依赖名compile 'x:y:z'中的版本号z
+    desc = 'Non intrusive frame'            // 对该开源组件的说明
+    website = 'https://github.com/MRwangqi/Mamba'  // VCS地址，即填写项目上传的Github地址
 }
