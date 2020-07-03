@@ -30,8 +30,12 @@ public class MambaPlugin implements Plugin<Project> {
                 CheckUtils.exclude = extension.exclude
                 CheckUtils.include = extension.include
                 CheckUtils.trackEnable = extension.trackEnable
+                CheckUtils.methodEnable = extension.methodEnable
 
                 Logger.e("extension exclude:" + extension.exclude)
+                Logger.e("extension include:" + extension.include)
+                Logger.e("extension trackEnable:" + extension.trackEnable)
+                Logger.e("extension methodEnable:" + extension.methodEnable)
             }
         }
     }

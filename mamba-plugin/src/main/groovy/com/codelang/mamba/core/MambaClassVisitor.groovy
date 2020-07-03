@@ -27,7 +27,8 @@ class MambaClassVisitor extends ClassVisitor {
 
         mv = new AdviceAdapter(Opcodes.ASM6, mv, access, name, desc) {
 
-            boolean isTrack = false
+            private boolean isTrack = false
+            private int varInsnIndex = 0
 
             @Override
             AnnotationVisitor visitAnnotation(String annotation, boolean visible) {
@@ -41,7 +42,6 @@ class MambaClassVisitor extends ClassVisitor {
             @Override
             protected void onMethodEnter() {
                 super.onMethodEnter()
-                Logger.e("onMethodExit  class =" + className + " methodName=" + name)
 
                 // 获取方法的所有参数类型
                 final Type[] argTypes = Type.getArgumentTypes(desc)
@@ -63,16 +63,17 @@ class MambaClassVisitor extends ClassVisitor {
                     mv.visitInsn(ICONST_0 + typeSize)
                     mv.visitTypeInsn(ANEWARRAY, "java/lang/Object")
                     // 遍历参数，将参数设置进 object 数组中
+                    varInsnIndex = 0
                     for (int i = 0; i < typeSize; i++) {
                         Type type = argTypes[i]
                         mv.visitInsn(DUP)
                         mv.visitInsn(ICONST_0 + i)
-                        visitVarOrMethod(type.internalName, i + 1)
+                        visitVarOrMethod(type.internalName)
                         mv.visitInsn(AASTORE)
                     }
                     mv.visitMethodInsn(INVOKESTATIC, Config.GENERATE_TO_CLASS_NAME, Config.REGISTER_METHOD_ENTER_NAME, "(Ljava/lang/Class;Ljava/lang/String;[Ljava/lang/Object;)V", false);
-                } else {
-                    mv.visitMethodInsn(INVOKESTATIC, Config.GENERATE_TO_CLASS_NAME, Config.REGISTER_METHOD_EXIT_NAME, "(Ljava/lang/Class;Ljava/lang/String;)V", false)
+                } else if (CheckUtils.methodEnable) {
+                    mv.visitMethodInsn(INVOKESTATIC, Config.GENERATE_TO_CLASS_NAME, Config.REGISTER_METHOD_ENTER_NAME, "(Ljava/lang/Class;Ljava/lang/String;)V", false)
                 }
 
             }
@@ -80,72 +81,97 @@ class MambaClassVisitor extends ClassVisitor {
             @Override
             protected void onMethodExit(int opcode) {
                 super.onMethodExit(opcode)
-                Logger.e("onMethodExit  class =" + className + " methodName=" + name)
-
-                mv.visitLdcInsn(Type.getType("L" + className + ";"))
-                mv.visitLdcInsn(name)
-                mv.visitMethodInsn(INVOKESTATIC, Config.GENERATE_TO_CLASS_NAME, Config.REGISTER_METHOD_EXIT_NAME, "(Ljava/lang/Class;Ljava/lang/String;)V", false);
+                if (CheckUtils.methodEnable) {
+                    mv.visitLdcInsn(Type.getType("L" + className + ";"))
+                    mv.visitLdcInsn(name)
+                    mv.visitMethodInsn(INVOKESTATIC, Config.GENERATE_TO_CLASS_NAME, Config.REGISTER_METHOD_EXIT_NAME, "(Ljava/lang/Class;Ljava/lang/String;)V", false);
+                }
             }
 
-
-            void visitVarOrMethod(String paramsType, int index) {
+            /**
+             * int、float、boolean、byte、short、对象 为一个 varInsnIndex
+             * double、long 的基础类型为两个 varInsnIndex
+             * @param paramsType
+             */
+            private void visitVarOrMethod(String paramsType) {
                 switch (paramsType) {
                     case "Z":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;", false)
                         break
                     case "java/lang/Boolean":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         break
                     case "B":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;", false)
                         break
                     case "java/lang/Byte":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         break
                     case "C":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf", "(C)Ljava/lang/Character;", false)
                         break
                     case "java/lang/Character":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         break
                     case "S":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf", "(S)Ljava/lang/Short;", false)
                         break
                     case "java/lang/Short":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         break
                     case "I":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false)
                         break
                     case "java/lang/Integer":
-                        mv.visitVarInsn(ILOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(ILOAD, varInsnIndex)
                         break
                     case "J":
-                        mv.visitVarInsn(LLOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(LLOAD, varInsnIndex)
                         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;", false)
+                        varInsnIndex++
                         break
                     case "java/lang/Long":
-                        mv.visitVarInsn(LLOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(LLOAD, varInsnIndex)
                         break
                     case "F":
-                        mv.visitVarInsn(FLOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(FLOAD, varInsnIndex)
                         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;", false)
                         break
                     case "java/lang/Float":
-                        mv.visitVarInsn(FLOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(FLOAD, varInsnIndex)
                         break
                     case "D":
-                        mv.visitVarInsn(DLOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(DLOAD, varInsnIndex)
                         mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf", "(D)Ljava/lang/Double;", false)
+                        varInsnIndex++
                         break
                     case "java/lang/Double":
-                        mv.visitVarInsn(DLOAD, index)
+                        varInsnIndex++
+                        mv.visitVarInsn(DLOAD, varInsnIndex)
                         break
+                    default:
+                        varInsnIndex++
+                        mv.visitVarInsn(ALOAD, varInsnIndex)
                 }
             }
 

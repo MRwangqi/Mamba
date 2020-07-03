@@ -9,6 +9,7 @@ class CheckUtils {
     public static ArrayList<String> exclude = []
     public static ArrayList<String> include = []
     public static boolean trackEnable = false
+    public static boolean methodEnable = true
 
 
     /**

@@ -6,5 +6,6 @@ class MambaExtension {
     public ArrayList<String> include = []
 
     public boolean trackEnable = false
+    public boolean methodEnable = true
 
 }
