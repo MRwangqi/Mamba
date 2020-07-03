@@ -2,7 +2,8 @@
 
 
 ## Mamba
-mamba-plugin: [ ![Download](https://api.bintray.com/packages/codelang-organization/maven/mamba-plugin/images/download.svg) ](https://bintray.com/codelang-organization/maven/mamba-plugin/_latestVersion) mamba-api: [ ![Download](https://api.bintray.com/packages/codelang-organization/maven/mamba-api/images/download.svg) ](https://bintray.com/codelang-organization/maven/mamba-api/_latestVersion)
+mamba-plugin: [ ![Download](https://api.bintray.com/packages/codelang-organization/maven/mamba-plugin/images/download.svg) ](https://bintray.com/codelang-organization/maven/mamba-plugin/_latestVersion)
+mamba-api: [ ![Download](https://api.bintray.com/packages/codelang-organization/maven/mamba-api/images/download.svg) ](https://bintray.com/codelang-organization/maven/mamba-api/_latestVersion)
 监听方法的开始和结束<br />
 
 <a name="6860b943"></a>
@@ -33,7 +34,7 @@ mamba {
             "com.kiwi.mamba.base.MyApplication",
             "com.kiwi.mamba.loader"
     ]
-    methodEnbale = true
+    methodEnable = true
     trackEnable = true
 }
 ```
@@ -71,21 +72,25 @@ mamba {
             "com.kiwi.mamba.base.MyApplication",
             "com.kiwi.mamba.loader"
     ]
-    methodEnbale = true
+    methodEnable = true
 }
 ```
 
 - include  : 配置需要进行插桩的包路径、类
 - exclude : 对包路径、类不进行插桩
-- methodEnbale :  方法插桩开启，默认为 true
+- methodEnable :  方法插桩开启，默认为 true
 
 
-<br />打印信息:
-> com.kiwi.mamba E/time: class=com.kiwi.mamba.MainActivity methodName=<init> costTime=0ms
-> com.kiwi.mamba E/time: class=com.kiwi.mamba.MainActivity methodName=onCreate costTime=208ms
-> com.kiwi.mamba E/time: class=com.kiwi.mamba.MainActivity methodName=goPage costTime=14ms
-> com.kiwi.mamba E/time: class=com.codelang.library.TrackActivity methodName=<init> costTime=0ms
-> com.kiwi.mamba E/time: class=com.codelang.library.TrackActivity methodName=onCreate costTime=36ms
+打印信息:
+```
+com.kiwi.mamba E/time: class=com.kiwi.mamba.MainActivity methodName=<init> costTime=0ms
+com.kiwi.mamba E/time: class=com.kiwi.mamba.MainActivity methodName=onCreate costTime=208ms
+com.kiwi.mamba E/time: class=com.kiwi.mamba.MainActivity methodName=goPage costTime=14ms
+com.kiwi.mamba E/time: class=com.codelang.library.TrackActivity methodName=<init> costTime=0ms
+com.kiwi.mamba E/time: class=com.codelang.library.TrackActivity methodName=onCreate costTime=36ms
+```
+
+
 
 
 <br />注：Mamba 的初始化，或是实现的 Loader 类，都必须配置 exclude，不然会发生插桩导致循环调用的情况
