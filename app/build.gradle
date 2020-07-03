@@ -35,8 +35,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation "com.codelang:mamba-api:1.0.0"
     implementation project(":library")
+//    implementation project(":mamba-api")
+    implementation "com.codelang:mamba-api:1.0.2"
 
     implementation 'com.google.code.gson:gson:2.8.6'
 }
@@ -46,7 +47,9 @@ mamba {
     include = ["com.kiwi.mamba", "com.codelang.library"]
     exclude = [
             "com.kiwi.mamba.base.MyApplication",
-            "com.kiwi.mamba.loader"
+            "com.kiwi.mamba.loader",
+            "com.codelang.library.bean"
     ]
-    trackEnable = true
+    trackEnable = false
+    methodEnable = true
 }

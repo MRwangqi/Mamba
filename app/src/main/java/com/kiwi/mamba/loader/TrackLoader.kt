@@ -7,13 +7,13 @@ import com.kiwi.mamba.loader.utils.loge
 
 class TrackLoader : IMambaLoader {
 
-    override fun methodEnter(clazz: Class<*>?, methodName: String?,args: Array<out Any>?) {
+    override fun methodEnter(clazz: Class<*>?, methodName: String?, args: Array<out Any>?) {
         when (clazz) {
             MainActivity::class.java -> {
-                mainPage(methodName)
+                mainPage(methodName, args)
             }
             TrackActivity::class.java -> {
-                trackPage(methodName)
+                trackPage(methodName, args)
             }
         }
     }
@@ -21,10 +21,13 @@ class TrackLoader : IMambaLoader {
     /**
      * main 页面
      */
-    private fun mainPage(methodName: String?) {
+    private fun mainPage(methodName: String?, args: Array<out Any>?) {
         when (methodName) {
             MainPage.GO_PAGE -> {
-                "进入跟踪页面".loge()
+                "触发 $methodName 方法".loge()
+                args?.forEach {
+                    "捕捉到参数值:$it ".loge()
+                }
             }
         }
     }
@@ -32,13 +35,13 @@ class TrackLoader : IMambaLoader {
     /**
      * track 页面
      */
-    private fun trackPage(methodName: String?) {
+    private fun trackPage(methodName: String?, args: Array<out Any>?) {
         when (methodName) {
-            TrackPage.OPEN -> {
-                "打开".loge()
-            }
-            TrackPage.CLOSE -> {
-                "关闭".loge()
+            TrackPage.TRACK_OPEN, TrackPage.TRACK_CLOSE -> {
+                "触发 $methodName 方法".loge()
+                args?.forEach {
+                    "捕捉到参数值:$it ".loge()
+                }
             }
         }
     }
@@ -54,6 +57,6 @@ object MainPage {
 }
 
 object TrackPage {
-    const val OPEN = "open"
-    const val CLOSE = "close"
+    const val TRACK_OPEN = "open"
+    const val TRACK_CLOSE = "close"
 }
