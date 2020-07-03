@@ -50,6 +50,6 @@ mamba {
             "com.kiwi.mamba.loader",
             "com.codelang.library.bean"
     ]
-    trackEnable = false
+    trackEnable = true
     methodEnable = true
 }
